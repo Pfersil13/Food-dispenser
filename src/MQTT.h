@@ -5,7 +5,7 @@
     
     #define MQTT_VERSION MQTT_VERSION_3_1_1
     
-    #define MQTT_SERVER_IP "192.168.1.117" 
+    #define MQTT_SERVER_IP "192.168.1.117"
     #define MQTT_USER  "admin"
     #define MQTT_PASSWORD  "U3Dl03r2CWE9X58TZ1SK"
 
@@ -15,7 +15,7 @@
     #define MQTT_FOOD_WEIGHT_TOPIC  "home/pet/food/weight"
     
     #define MQTT_INATAKES_CONFIG_CONFIRMATION  "home/pet/intakes/confirm"
-
+    #define MQTT_INATAKES_CONFIG  "home/pet/intakes/confirm"
     //void reconnect();
     boolean reconnect();
     void test_conn();

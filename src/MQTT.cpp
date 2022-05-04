@@ -101,6 +101,12 @@ void callback(char* topic, byte* message, unsigned int length) {
       Serial.println("off");
     }
   }
+  if (String(topic) == MQTT_INATAKES_CONFIG) {
+   
+    if(messageTemp == "on"){
+      Serial.println("on");
+
+    }}
 }
 
 

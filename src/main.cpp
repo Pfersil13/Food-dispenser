@@ -5,6 +5,7 @@
 #include "MQTT.h"
 #include "Pinout.h"
 #include "RTC.h"
+#include "ReadFS.h"
 
 //Scale variable stuff
 long Tare,TareADC;
@@ -14,12 +15,15 @@ bool calState = 0;
 //Variables to make a non blocking delay
 unsigned long now;
 long lastMsg = 0;
-int  interval = 1000;
+int  interval = 2000;
+
+int hour, minute, day;
 
 void setup() {
   // Marcar los pines como salida
   Serial.begin(115200);
-
+  LittleFS.begin();
+   
   pinMode(stepPin, OUTPUT);   
   pinMode(Trig, OUTPUT);
   pinMode(Echo, INPUT);
@@ -27,11 +31,16 @@ void setup() {
   setup_mqtt();         //Call all MQTT Setups functions
   //setup_scale();      //Call all Scale Setups functions
   setUpRTC();           //Call all Internet RTC Setups functions
-  
-  charMsg_out("Hi/Hi", "Taring"); //Send char MQTT msg
   //newTareADC();                 //Tare scale
-  charMsg_out("Hi", "Tared");     //Send char MQTT msg
+  returnFromFS();
+  Serial.println("NextIntake");
 
+  //addIntake(11, 55, 0, 40);
+  //addIntake(11, 45, 0, 40);
+  //ReadIntakes(); 
+  
+  //WriteIntakes();
+  //ReadIntakes();
 }
  
 void loop() {
@@ -43,16 +52,15 @@ void loop() {
   //Structure for calling every interval time 
   if (now - lastMsg >= interval) {  
     lastMsg = now;
-     test_conn();
-     testWiFI();
-    getDate();
+    test_conn();
+    testWiFI();
+    getDate(hour, minute, day);
+    //RevisarCalendario(hour, minute, day);
+    returnIntakes(0);
     //nivelDeposito();
     //double weight = readWeight();
     //floatMsg_out(MQTT_FOOD_WEIGHT_TOPIC,weight); 
-    addIntake(1, 0, 1, 40);
-    addIntake(1, 30, 1, 40);
-    addIntake(1, 0, 1, 40);
-    returnIntakes(1);
+    
     
   }
   

@@ -45,25 +45,25 @@ void setUpRTC(){
   }
 
 
-void getDate(){
+void getDate(int &currentHour, int &currentMinute, int &currentDay){
 
 timeClient.update();
 
 time_t epochTime = timeClient.getEpochTime();
-Serial.print("Epoch Time: ");
-Serial.println(epochTime);
+//Serial.print("Epoch Time: ");
+//Serial.println(epochTime);
   
 String formattedTime = timeClient.getFormattedTime();
 Serial.print("Formatted Time: ");
 Serial.println(formattedTime);  
 //StringMsg_out("Hi", formattedTime);
-int currentHour = timeClient.getHours();
+currentHour = timeClient.getHours();
   
-int currentMinute = timeClient.getMinutes();
+currentMinute = timeClient.getMinutes();
   
 int currentSecond = timeClient.getSeconds(); 
 
-int weekDay = timeClient.getDay();
+currentDay = timeClient.getDay();
 
 //StringMsg_out("Hi", weekDay);
   }
@@ -71,12 +71,14 @@ int weekDay = timeClient.getDay();
 
 void RevisarCalendario(int hour, int minute, int day){
   int minsDay = hour*60 + minute;
+  Serial.println(minsDay);
     switch (day){
     case 0:
       for(int i = 0; i < nIntakes; i++){
-        //charMsg_out(MQTT_INATAKES_CONFIG_CONFIRMATION,"IM IN");
-        if(dispensed[i] == 0 && intakesDomingos[i] < minsDay){
-          dispense(intakesDomingosWeight[i]);
+        charMsg_out(MQTT_INATAKES_CONFIG_CONFIRMATION,"IM IN");
+        if(dispensed[i] == 0 && intakesDomingos[i] <=  minsDay){
+          //dispense(intakesDomingosWeight[i]);
+          Serial.println(intakesDomingosWeight[i]);
           dispensed[i] = 1;
           break;
           //intMsg_out(MQTT_INATAKES_CONFIG_CONFIRMATION,intakesLunes[i]);
@@ -86,7 +88,7 @@ void RevisarCalendario(int hour, int minute, int day){
       //charMsg_out(MQTT_INATAKES_CONFIG_CONFIRMATION,"Hello :3");
       for(int i = 0; i < nIntakes; i++){
         //charMsg_out(MQTT_INATAKES_CONFIG_CONFIRMATION,"IM IN");
-        if(dispensed[i] == 0 && intakesLunes[i] < minsDay){
+        if(dispensed[i] == 0 && intakesLunes[i] <= minsDay){
           dispense(intakesLunesWeight[i]);
           dispensed[i] = 1;
           break;
@@ -96,7 +98,7 @@ void RevisarCalendario(int hour, int minute, int day){
     case 2:
         for(int i = 0; i < nIntakes; i++){
         //charMsg_out(MQTT_INATAKES_CONFIG_CONFIRMATION,"IM IN");
-        if(dispensed[i] == 0 && intakesMartes[i] < minsDay){
+        if(dispensed[i] == 0 && intakesMartes[i] <= minsDay){
           dispense(intakesMartesWeight[i]);
           dispensed[i] = 1;
           break;
@@ -106,7 +108,7 @@ void RevisarCalendario(int hour, int minute, int day){
     case 3:
         for(int i = 0; i < nIntakes; i++){
         //charMsg_out(MQTT_INATAKES_CONFIG_CONFIRMATION,"IM IN");
-        if(dispensed[i] == 0 && intakesMiercoles[i] < minsDay){
+        if(dispensed[i] == 0 && intakesMiercoles[i] <= minsDay){
           dispense(intakesMiercolesWeight[i]);
           dispensed[i] = 1;
           break;
@@ -116,7 +118,7 @@ void RevisarCalendario(int hour, int minute, int day){
     case 4:
         for(int i = 0; i < nIntakes; i++){
         //charMsg_out(MQTT_INATAKES_CONFIG_CONFIRMATION,"IM IN");
-        if(dispensed[i] == 0 && intakesJueves[i] < minsDay){
+        if(dispensed[i] == 0 && intakesJueves[i] <= minsDay){
           dispense(intakesJuevesWeight[i]);
           dispensed[i] = 1;
           break;
@@ -126,7 +128,7 @@ void RevisarCalendario(int hour, int minute, int day){
     case 5:
         for(int i = 0; i < nIntakes; i++){
         //charMsg_out(MQTT_INATAKES_CONFIG_CONFIRMATION,"IM IN");
-        if(dispensed[i] == 0 && intakesViernes[i] < minsDay){
+        if(dispensed[i] == 0 && intakesViernes[i] <= minsDay){
           dispense(intakesViernesWeight[i]);
           dispensed[i] = 1;
           break;
@@ -136,7 +138,7 @@ void RevisarCalendario(int hour, int minute, int day){
     case 6:
         for(int i = 0; i < nIntakes; i++){
         //charMsg_out(MQTT_INATAKES_CONFIG_CONFIRMATION,"IM IN");
-        if(dispensed[i] == 0 && intakesSabados[i] < minsDay){
+        if(dispensed[i] == 0 && intakesSabados[i] <= minsDay){
           dispense(intakesSabadosWeight[i]);
           dispensed[i] = 1;
           break;
@@ -149,10 +151,9 @@ void RevisarCalendario(int hour, int minute, int day){
     }
 }
 
-//Function to add intak, not sure if needed cuz isa is working on this too
 void addIntake(int hour, int minute, int day, int weight){
     int minsDay = hour*60 + minute;
-
+     Serial.println(minsDay);
     switch (day){
     case 0:
       for(int i=0; i < nIntakes; i++ ){
@@ -351,50 +352,3 @@ void returnFromEEPROM(){
     EEPROM.end();      
       }
 
-
-void cleanEEPROM(int day){
-  EEPROM.begin(EEPROM_SIZE);
-  int a = 0;
-
-  switch (day){
-    case 0:
-      for(int i = day; i< nIntakes; i++){
-        EEPROM.put(i, a);
-      }
-        break;
-      case 1:
-      for(int i = day*nIntakes; i< day*nIntakes + nIntakes; i++){
-        EEPROM.put(i, a);
-      }
-        break;
-    case 2:
-      for(int i = day*nIntakes; i< day*nIntakes + nIntakes; i++){
-        EEPROM.put(i, a);
-      }
-        break;
-    case 3:
-      for(int i = day*nIntakes; i< day*nIntakes + nIntakes; i++){
-        EEPROM.put(i, a);
-      }
-        break;
-    case 4:
-      for(int i = day*nIntakes; i< day*nIntakes + nIntakes; i++){
-        EEPROM.put(i, a);
-      }
-        break;
-    case 5:
-        for(int i = day*nIntakes; i< day*nIntakes + nIntakes; i++){
-        EEPROM.put(i, a);
-      }
-        break;
-    case 6:
-        for(int i = day*nIntakes; i< day*nIntakes + nIntakes; i++){
-        EEPROM.put(i, a);
-      }
-        break;
-    default:
-    
-    break;
-}
-EEPROM.end();
-}
