@@ -13,6 +13,7 @@ void setup_wifi() {
   Serial.print("Connecting to ");
   Serial.println(WIFI_SSID);
   WiFi.mode(WIFI_STA);
+  wifi_fpm_set_sleep_type(LIGHT_SLEEP_T);
   WiFi.begin(WIFI_SSID, WIFI_PASSWORD);
   for(int i = 0; i  < 100; i++){
     Serial.print(".");

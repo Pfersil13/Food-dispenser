@@ -6,41 +6,49 @@
 #include "Pinout.h"
 #include "RTC.h"
 #include "ReadFS.h"
+#include "Light.h"
+
 
 //Scale variable stuff
 long Tare,TareADC;
 float realMass = 100;
-bool calState = 0;
 
 //Variables to make a non blocking delay
 unsigned long now;
 long lastMsg = 0;
-int  interval = 2000;
+unsigned int  interval =2000;
 
 int hour, minute, day;
 
 void setup() {
-  // Marcar los pines como salida
+  //Configure serial & little FS
   Serial.begin(115200);
   LittleFS.begin();
-   
+
+  //Confiugre OUTPUT & INPUTS
+  pinMode(DRV_ENABLE,OUTPUT);
   pinMode(stepPin, OUTPUT);   
   pinMode(Trig, OUTPUT);
   pinMode(Echo, INPUT);
+  
+  //Pull high to disable stepper
+  digitalWrite(DRV_ENABLE,HIGH);
+
+  //IoT & others config stuff
+
   setup_wifi();         //Call all WiFi Setups functions
   setup_mqtt();         //Call all MQTT Setups functions
-  //setup_scale();      //Call all Scale Setups functions
+  setup_scale();      //Call all Scale Setups functions
   setUpRTC();           //Call all Internet RTC Setups functions
-  //newTareADC();                 //Tare scale
-  returnFromFS();
-  Serial.println("NextIntake");
+  setupNeopixel();    //Setup LEDS :3
 
-  //addIntake(11, 55, 0, 40);
-  //addIntake(11, 45, 0, 40);
-  //ReadIntakes(); 
   
-  //WriteIntakes();
-  //ReadIntakes();
+  newTareADC();                 //Tare scale
+  returnFromFS();     //Return Intakes form SPIFFS
+  
+  //setBunchOfIntakes();
+
+  setLeds(nivelDeposito());   //Set leds indicator 
 }
  
 void loop() {
@@ -48,26 +56,18 @@ void loop() {
   
   test_conn();    //Test MQTT conection  & connect if not
   testWiFI();     //Test Wifi connection & connect if not
-  
+
   //Structure for calling every interval time 
   if (now - lastMsg >= interval) {  
+    returnIntakes(day);
+
     lastMsg = now;
     test_conn();
     testWiFI();
-    getDate(hour, minute, day);
-    //RevisarCalendario(hour, minute, day);
-    returnIntakes(0);
-    //nivelDeposito();
-    //double weight = readWeight();
-    //floatMsg_out(MQTT_FOOD_WEIGHT_TOPIC,weight); 
-    
-    
-  }
-  
-  //Calibration stuff. It's form Voltstone code xD
-  if(calState == 1){
-    newTareADC();
-    delay(5000);
-    cal(TareADC,realMass);
-  }
-}
+    getDate(hour, minute, day);  
+    RevisarCalendario(hour, minute, day);
+    StringMsg_out(MQTT_INATAKES_CONFIG_CONFIRMATION, String("IM IN"));
+    //returnIntakes(0);
+    double weight = readWeight();
+    floatMsg_out(MQTT_FOOD_WEIGHT_TOPIC,weight); 
+  }}

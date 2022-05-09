@@ -5,11 +5,16 @@
     #include "LittleFS.h"
     #include "RTC.h"
 
+    
     void ReadIntakes();
-    void WriteIntakes();
-    void returnFromFS();
 
-    //A lot of arrays to store intakes and its weights
+    //Function to write ALL arrays into the non volatile memory 
+    void WriteIntakes();
+    void WriteDispensed();
+    //Function to retrun ALL intakes from the non volatile memory 
+    void returnFromFS();
+    
+    //A lot of external  arrays to store intakes and its weights
 
     extern int intakesLunes[nIntakes];
     extern int intakesLunesWeight[nIntakes];
@@ -25,6 +30,8 @@
     extern int intakesSabadosWeight[nIntakes];
     extern int intakesDomingos[nIntakes];
     extern int intakesDomingosWeight[nIntakes];
+
+    extern bool dispensed[nIntakes];
 #endif
 
 

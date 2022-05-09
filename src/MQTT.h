@@ -16,6 +16,8 @@
     
     #define MQTT_INATAKES_CONFIG_CONFIRMATION  "home/pet/intakes/confirm"
     #define MQTT_INATAKES_CONFIG  "home/pet/intakes/confirm"
+    #define MQTT_FEEDING "home/pet/feeding"
+    
     //void reconnect();
     boolean reconnect();
     void test_conn();

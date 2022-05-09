@@ -2,6 +2,7 @@
 #include "MQTT.h"
 #include "Weight_Stuff.h"
 #include "Pinout.h"
+#include "Light.h"
 
 unsigned long lastPulse = 0;
 int pulse = HIGH;
@@ -13,9 +14,10 @@ double Input, Output;
 unsigned long currentTime;
 double error;
 
-
+///////////////////////////////////////////////////////////////
 //Non blocking stepper motor control 
-void motorSpeed(int interval){
+///////////////////////////////////////////////////////////////
+void motorSpeed(unsigned int interval){
     unsigned long now = micros();
   if (now - lastPulse >= interval && pulse == LOW) {
     digitalWrite(stepPin, HIGH);
@@ -26,11 +28,12 @@ void motorSpeed(int interval){
     digitalWrite(stepPin, LOW);
     lastPulse = now;
     pulse = LOW;
-  }
-  
-}
+  }}
 
+
+///////////////////////////////////////////////////////////////
 //Function to compute PID (Actually P)
+///////////////////////////////////////////////////////////////
 double computePID(double inp, double Setpoint){     
     double error =  Setpoint - inp;
     double u = u_max - error * Kp;
@@ -38,8 +41,9 @@ double computePID(double inp, double Setpoint){
             u = u_min;
     return u;
 }
-
+///////////////////////////////////////////////////////////////
 //Calculate the level (%) of food in ¿deposito?
+///////////////////////////////////////////////////////////////
 int nivelDeposito(){
     int i;
     int a = 0;
@@ -64,8 +68,9 @@ int nivelDeposito(){
     intMsg_out(MQTT_FOOD_LEVEL_TOPIC, porcentaje);  //Send int MQTT msg 
     return porcentaje;    //Return value 
   }
-
-  //Function to measure distance
+///////////////////////////////////////////////////////////////
+//Function to measure distance
+///////////////////////////////////////////////////////////////
   int ping(int TriggerPin, int EchoPin) {
    long duration, distanceCm;
    
@@ -81,35 +86,36 @@ int nivelDeposito(){
    return distanceCm;     //Return value
 }
 
-
+///////////////////////////////////////////////////////////////
 //Function to dispense x quantity of food
+///////////////////////////////////////////////////////////////
 void dispense(int setPoint){
+  digitalWrite(DRV_ENABLE,LOW);
+
   int k = 0;
   int nivel = nivelDeposito();
-
+  setLeds(nivel);
+  newTareADC();
   if(nivel >= MinimumLevel){
   long lastMsg = 0;
-  int  interval = 200;
-
+  unsigned int  interval = 200;
+  intMsg_out(MQTT_FEEDING,setPoint);
+  floatMsg_out(MQTT_INATAKES_CONFIG,nivel );
   while(k < nCounts){
   unsigned long now = millis();
-  reconnect();
+  //reconnect();
     if (now - lastMsg >= interval) {
       lastMsg = now;
-      int aka = ping(Trig,Echo);
-      double a =  aka;
-      floatMsg_out("Hi", a);
       Input = readWeight();
-      //floatMsg_out("Hi", Input);
+      floatMsg_out(MQTT_INATAKES_CONFIG, Input);
       Output = computePID(Input, setPoint);      // calcular el controlador
     
-}
-  if(Input < setPoint){
-     digitalWrite(stepPin, HIGH);
-  motorSpeed(Output);
-  }}
-  }else{
-    //beep
-
-  }
-  }
+    }
+    if(Input < setPoint){
+      digitalWrite(stepPin, HIGH);
+      motorSpeed(Output);
+    }else{
+      k++;
+    }}
+    digitalWrite(DRV_ENABLE,HIGH);
+    }}

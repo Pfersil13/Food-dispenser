@@ -22,7 +22,7 @@
 
         int ping(int TriggerPin, int EchoPin);
         int nivelDeposito();
-        void motorSpeed(int interval);
+        void motorSpeed(unsigned int interval);
         double computePID(double inp, double Setpoint);  
         void dispense(int setPoint);     
 #endif
