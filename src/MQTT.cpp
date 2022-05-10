@@ -1,6 +1,3 @@
-#include <ESP8266WiFi.h>
-#include <PubSubClient.h>
-#include "WifiESP.h"
 #include "MQTT.h"
 
 
@@ -89,7 +86,7 @@ void callback(char* topic, byte* message, unsigned int length) {
   Serial.print(". Message: ");
   String messageTemp;
   
-  for (int i = 0; i < length; i++) {
+  for (unsigned int i = 0; i < length; i++) {
     Serial.print((char)message[i]);
     messageTemp += (char)message[i];
   }
