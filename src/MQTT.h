@@ -2,12 +2,15 @@
     #define MQTT_H
 
     #include <Arduino.h>
+    #include <ESP8266WiFi.h>
+    #include <PubSubClient.h>
+    #include "WifiESP.h"
     
     #define MQTT_VERSION MQTT_VERSION_3_1_1
     
-    #define MQTT_SERVER_IP "192.168.1.117"
-    #define MQTT_USER  "admin"
-    #define MQTT_PASSWORD  "U3Dl03r2CWE9X58TZ1SK"
+    //MQTT Private stuff here
+    #include "Secrets.h"
+   
 
 
     // MQTT: topics                        

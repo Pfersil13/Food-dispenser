@@ -3,10 +3,8 @@
 
     #include <Arduino.h>
     
-    // Wifi: SSID and password
-    #define WIFI_SSID  "SSID"  
-    #define WIFI_PASSWORD "Password"
-
+    //SSID y Password here
+    #include "Secrets.h"
    
 
     void setup_wifi();
