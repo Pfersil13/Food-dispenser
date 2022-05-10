@@ -8,26 +8,14 @@
 WiFiUDP ntpUDP;
 NTPClient timeClient(ntpUDP, "pool.ntp.org");
 //Week Days
-String weekDays[7]={"Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"};
+String weekDays[7]={"Domingo", "Lunes", "Martes", "Miercoles", "Jueves", "Viernes", "Sabado"};
 
 //Month names
 String months[12]={"January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"};
 
 //A lot of arrays to store intakes and its weights
-int intakesLunes[nIntakes];
-int intakesLunesWeight[nIntakes];
-int intakesMartes[nIntakes];
-int intakesMartesWeight[nIntakes];
-int intakesMiercoles[nIntakes];
-int intakesMiercolesWeight[nIntakes];
-int intakesJueves[nIntakes];
-int intakesJuevesWeight[nIntakes];
-int intakesViernes[nIntakes];
-int intakesViernesWeight[nIntakes];
-int intakesSabados[nIntakes];
-int intakesSabadosWeight[nIntakes];
-int intakesDomingos[nIntakes];
-int intakesDomingosWeight[nIntakes];
+int intakes[Days][nIntakes];
+int intakesWeight[Days][nIntakes];
 
 //All an array to see if that intake is already taken
 bool dispensed[nIntakes] ;
@@ -54,80 +42,13 @@ void setUpRTC(){
 ///////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////
 void newDay(int day){
-  switch (day){
-    case 0:
-  for(int i = 0; i < nIntakes; i++){
-    
-    if(intakesDomingos[i] != 0){
+  for(int i = 0; i < nIntakes; i++){  
+    if(intakes[day][i] != 0){
       dispensed[i] = 0;
         }else{
       dispensed[i] = 1;
     }}
-  break;
-    case 1:
-  for(int i = 0; i < nIntakes; i++){
-    
-    if(intakesLunes[i] != 0){
-      dispensed[i] = 0;
-        }
-    else{
-      dispensed[i] = 1;
-    }}
-  break;
-    case 2:
-  for(int i = 0; i < nIntakes; i++){
-    
-    if(intakesMartes[i] != 0){
-      dispensed[i] = 0;
-        }
-    else{
-      dispensed[i] = 1;
-    }}
-  break;
-    case 3:
-  for(int i = 0; i < nIntakes; i++){
-    
-    if(intakesMiercoles[i] != 0){
-      dispensed[i] = 0;
-        }
-    else{
-      dispensed[i] = 1;
-    }}
-  break;
-    case 4:
-  for(int i = 0; i < nIntakes; i++){
-    
-    if(intakesJueves[i] != 0){
-      dispensed[i] = 0;
-        }
-    else{
-      dispensed[i] = 1;
-    }}
-  break;
-    case 5:
-  for(int i = 0; i < nIntakes; i++){
-    
-    if(intakesViernes[i] != 0){
-      dispensed[i] = 0;
-        }
-    else{
-      dispensed[i] = 1;
-    }}
-  break;
-    case 6:
-  for(int i = 0; i < nIntakes; i++){
-    
-    if(intakesSabados[i] != 0){
-      dispensed[i] = 0;
-        }
-    else{
-      dispensed[i] = 1;
-    }}
-  break;
-    default:
-    
-    break;
-}
+
 WriteDispensed();
 }
 
@@ -168,93 +89,16 @@ void RevisarCalendario(int hour, int minute, int day){
   int minsDay = hour*60 + minute;
   StringMsg_out(MQTT_INATAKES_CONFIG_CONFIRMATION,String("IM IN"));
   Serial.println(minsDay);
-    switch (day){
-    case 0:
-      for(int i = 0; i < nIntakes; i++){
+    for(int i = 0; i < nIntakes; i++){
         StringMsg_out(MQTT_INATAKES_CONFIG_CONFIRMATION,String("IN 0"));
-        if(dispensed[i] == 0 && intakesDomingos[i] <=  minsDay){
-          dispense(intakesDomingosWeight[i]);
+        if(dispensed[i] == 0 && intakes[day][i] <=  minsDay){
+          dispense(intakesWeight[day][i]);
           //Serial.println(intakesDomingosWeight[i]);
           dispensed[i] = 1;
           WriteDispensed();
           break;
           //intMsg_out(MQTT_INATAKES_CONFIG_CONFIRMATION,intakesLunes[i]);
         }}
-        break;
-    case 1:
-      StringMsg_out(MQTT_INATAKES_CONFIG_CONFIRMATION,String("Hello :3"));
-      for(int i = 0; i < nIntakes; i++){
-        //charMsg_out(MQTT_INATAKES_CONFIG_CONFIRMATION,"IM IN");
-        if(dispensed[i] == 0 && intakesLunes[i] <= minsDay){
-          dispense(intakesLunesWeight[i]);
-          dispensed[i] = 1;
-          WriteDispensed();
-          break;
-          //intMsg_out(MQTT_INATAKES_CONFIG_CONFIRMATION,intakesLunes[i]);
-        }}
-        break;
-    case 2:
-        for(int i = 0; i < nIntakes; i++){
-        StringMsg_out(MQTT_INATAKES_CONFIG_CONFIRMATION,String("IM IN"));
-        if(dispensed[i] == 0 && intakesMartes[i] <= minsDay){
-          dispense(intakesMartesWeight[i]);
-          dispensed[i] = 1;
-          WriteDispensed();
-          break;
-          //intMsg_out(MQTT_INATAKES_CONFIG_CONFIRMATION,intakesLunes[i]);
-        }}
-        break;
-    case 3:
-        for(int i = 0; i < nIntakes; i++){
-        StringMsg_out(MQTT_INATAKES_CONFIG_CONFIRMATION,String("IM IN"));
-        if(dispensed[i] == 0 && intakesMiercoles[i] <= minsDay){
-          dispense(intakesMiercolesWeight[i]);
-          dispensed[i] = 1;
-          WriteDispensed();
-          break;
-          //intMsg_out(MQTT_INATAKES_CONFIG_CONFIRMATION,intakesLunes[i]);
-        }}
-        break;
-    case 4:
-        for(int i = 0; i < nIntakes; i++){
-        StringMsg_out(MQTT_INATAKES_CONFIG_CONFIRMATION,String("IM IN"));
-        if(dispensed[i] == 0 && intakesJueves[i] <= minsDay){
-          dispense(intakesJuevesWeight[i]);
-          dispensed[i] = 1;
-          WriteDispensed();
-          break;
-          //intMsg_out(MQTT_INATAKES_CONFIG_CONFIRMATION,intakesLunes[i]);
-        }}
-        break;
-    case 5:
-        for(int i = 0; i < nIntakes; i++){
-        StringMsg_out(MQTT_INATAKES_CONFIG_CONFIRMATION,String("IM IN VIERNES :3"));
-        if(dispensed[i] == 0 && intakesViernes[i] <= minsDay){
-          StringMsg_out(MQTT_INATAKES_CONFIG_CONFIRMATION,String("IM INTAKING"));
-          intMsg_out(MQTT_INATAKES_CONFIG,intakesViernesWeight[i]);
-          dispense(intakesViernesWeight[i]);
-          StringMsg_out(MQTT_INATAKES_CONFIG_CONFIRMATION,String("IM OUTAKING"));
-          dispensed[i] = 1;
-          WriteDispensed();
-          break;
-          //intMsg_out(MQTT_INATAKES_CONFIG_CONFIRMATION,intakesLunes[i]);
-        }}
-        break;
-    case 6:
-        for(int i = 0; i < nIntakes; i++){
-        StringMsg_out(MQTT_INATAKES_CONFIG_CONFIRMATION,String("IM IN"));
-        if(dispensed[i] == 0 && intakesSabados[i] <= minsDay){
-          dispense(intakesSabadosWeight[i]);
-          dispensed[i] = 1;
-          WriteDispensed();
-          break;
-          //intMsg_out(MQTT_INATAKES_CONFIG_CONFIRMATION,intakesLunes[i]);
-        }}
-        break;
-    default:
-    
-    break;
-    }
 }
 
 ///////////////////////////////////////////////////////////////
@@ -263,139 +107,31 @@ void RevisarCalendario(int hour, int minute, int day){
 void addIntake(int hour, int minute, int day, int weight){
     int minsDay = hour*60 + minute;
      Serial.println(minsDay);
-    switch (day){
-    case 0:
-      for(int i=0; i < nIntakes; i++ ){
-        if(intakesDomingos[i] == 0){
-           intakesDomingos[i] = minsDay;
-           intakesDomingosWeight[i] = weight;
+    for(int i=0; i < nIntakes; i++ ){
+        if(intakes[day][i] == 0){
+           intakes[day][i] = minsDay;
+           intakesWeight[day][i] = weight;
            dispensed[i] = 0;
            i = nIntakes + 1;
            
-        }}
-        break;
-    case 1:
-      //charMsg_out(MQTT_INATAKES_CONFIG_CONFIRMATION,"Hello :3");
-      for(int i = 0; i < nIntakes; i++){
-        //charMsg_out(MQTT_INATAKES_CONFIG_CONFIRMATION,"IM IN");
-        if(intakesLunes[i] == 0){
-           intakesLunes[i] = minsDay;
-           intakesLunesWeight[i] = weight;
-           dispensed[i] = 0;
-           i = nIntakes + 1;
-           //intMsg_out(MQTT_INATAKES_CONFIG_CONFIRMATION,intakesLunes[i]);
-        }}
-        break;
-    case 2:
-        for(int i=0; i < nIntakes; i++ ){
-        if(intakesMartes[i] == 0){
-           intakesMartes[i] = minsDay;
-           intakesMartesWeight[i] = weight;
-           dispensed[i] = 0;
-           i = nIntakes + 1;
-        }}
-        break;
-    case 3:
-        for(int i=0; i < nIntakes; i++ ){
-        if(intakesMiercoles[i] == 0){
-           intakesMiercoles[i] = minsDay;
-           intakesMiercolesWeight[i] = weight;
-           dispensed[i] = 0;
-           i = nIntakes + 1;
-        }}
-        break;
-    case 4:
-        for(int i=0; i < nIntakes; i++ ){
-        if(intakesJueves[i] == 0){
-           intakesJueves[i] = minsDay;
-           intakesJuevesWeight[i] = weight;
-           dispensed[i] = 0;
-           i = nIntakes + 1;
-        }}
-        break;
-    case 5:
-        for(int i=0; i < nIntakes; i++ ){
-        if(intakesViernes[i] == 0){
-           intakesViernes[i] = minsDay;
-           intakesViernesWeight[i] = weight;
-           dispensed[i] = 0;
-           i = nIntakes + 1;
-        }}
-        break;
-    case 6:
-        for(int i=0; i < nIntakes; i++ ){
-        if(intakesSabados[i] == 0){
-           intakesSabados[i] = minsDay;
-           intakesSabadosWeight[i] = weight;
-           dispensed[i] = 0;
-           i = nIntakes + 1;
-        }}
-        break;
-    default:
-    
-    break;
-}}
+        }}}
 
 
 ///////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////
 void returnIntakes(int day){
-  String intakes;
+  String Intakes;
   String weights;
   String disp;
-  switch (day){
-    case 0:
-      for(int i = 0; i < nIntakes; i++){
-        intakes +=  String(",") + String(intakesDomingos[i]);
-        weights +=  String(",") + String(intakesDomingosWeight[i]);
-      }
-        break;
-    case 1:
-      for(int i = 0; i < nIntakes; i++){
-        intakes +=  String(",") + String(intakesLunes[i]);
-        weights +=  String(",") + String(intakesLunesWeight[i]);
-      }
-        break;
-    case 2:
-      for(int i = 0; i < nIntakes; i++){
-        intakes +=  String(",") + String(intakesMartes[i]);
-        weights +=  String(",") + String(intakesMartesWeight[i]);
-      }
-        break;
-    case 3:
-      for(int i = 0; i < nIntakes; i++){
-        intakes +=  String(",") + String(intakesMiercoles[i]);
-        weights +=  String(",") + String(intakesMiercolesWeight[i]);
-      }
-        break;
-    case 4:
-      for(int i = 0; i < nIntakes; i++){
-        intakes +=  String(",") + String(intakesJueves[i]);
-        weights +=  String(",") + String(intakesJuevesWeight[i]);
-      }
-        break;
-    case 5:
-      for(int i = 0; i < nIntakes; i++){
-        intakes +=  String(",") + String(intakesViernes[i]);
-        weights +=  String(",") + String(intakesViernesWeight[i]);
-      }
-        break;
-    case 6:
-      for(int i = 0; i < nIntakes; i++){
-        intakes +=  String(",") + String(intakesSabados[i]);
-        weights +=  String(",") + String(intakesSabadosWeight[i]);
-      }
-        break;
-    default:
-    
-    break;
-}
-for(int i = 0; i < nIntakes; i++){
-      disp +=  String(",") + String(dispensed[i]); 
-      }
+  
+  for(int i=0; i < nIntakes; i++){
+    Intakes +=  String(",") + String(intakes[day][i]);
+    weights +=  String(",") + String(intakesWeight[day][i]);
+    disp +=  String(",") + String(dispensed[i]); 
+    }
 
-StringMsg_out(MQTT_INATAKES_CONFIG_CONFIRMATION,intakes);
+StringMsg_out(MQTT_INATAKES_CONFIG_CONFIRMATION,Intakes);
 StringMsg_out(MQTT_INATAKES_CONFIG_CONFIRMATION,weights);
 StringMsg_out(MQTT_INATAKES_CONFIG_CONFIRMATION,disp);
 }
@@ -474,80 +210,3 @@ void setBunchOfIntakes(){
   
   WriteIntakes();
 }
-
-///////////////////////////////////////////////////////////////
-////////////////////////USELESS STUFF//////////////////////////
-///////////////////////////////////////////////////////////////
-void storeToEEPROM(int day){
-  EEPROM.begin(EEPROM_SIZE);
-
-
-  switch (day){
-    case 0:
-      for(int i = day; i< nIntakes; i++){
-        EEPROM.put(i, intakesDomingos[i]);
-      }
-        break;
-      case 1:
-      for(int i = day*nIntakes; i< day*nIntakes + nIntakes; i++){
-        EEPROM.put(i, intakesLunes[i-day*nIntakes]);
-      }
-        break;
-    case 2:
-      for(int i = day*nIntakes; i< day*nIntakes + nIntakes; i++){
-        EEPROM.put(i, intakesMartes[i-day*nIntakes]);
-      }
-        break;
-    case 3:
-      for(int i = day*nIntakes; i< day*nIntakes + nIntakes; i++){
-        EEPROM.put(i, intakesMiercoles[i-day*nIntakes]);
-      }
-        break;
-    case 4:
-      for(int i = day*nIntakes; i< day*nIntakes + nIntakes; i++){
-        EEPROM.put(i, intakesJueves[i-day*nIntakes]);
-      }
-        break;
-    case 5:
-        for(int i = day*nIntakes; i< day*nIntakes + nIntakes; i++){
-        EEPROM.put(i, intakesViernes[i-day*nIntakes]);
-      }
-        break;
-    case 6:
-        for(int i = day*nIntakes; i< day*nIntakes + nIntakes; i++){
-        EEPROM.put(i, intakesSabados[i-day*nIntakes]);
-      }
-        break;
-    default:
-    
-    break;
-}
-EEPROM.end();
-}
-void returnFromEEPROM(){
-  EEPROM.begin(EEPROM_SIZE);
-  for(int i = 0; i< nIntakes; i++){
-        EEPROM.get(i, intakesDomingos[i]);
-      }
-      for(int i = nIntakes; i< 2*nIntakes; i++){
-        EEPROM.get(i, intakesLunes[i-nIntakes]);
-      }
-      for(int i = 2*nIntakes; i< 2*nIntakes + nIntakes; i++){
-        EEPROM.get(i, intakesMartes[i-2*nIntakes]);
-      }
-      for(int i = 3*nIntakes; i<  3*nIntakes + nIntakes; i++){
-        EEPROM.get(i, intakesMiercoles[i-3*nIntakes]);
-      }
-      for(int i = 4*nIntakes; i<  4*nIntakes + nIntakes; i++){
-        EEPROM.get(i, intakesJueves[i-4*nIntakes]);
-      }
-        for(int i = 5*nIntakes; i<  5*nIntakes + nIntakes; i++){
-        EEPROM.get(i, intakesViernes[i-5*nIntakes]);
-      }
-        for(int i = 6*nIntakes; i<  6*nIntakes + nIntakes; i++){
-        EEPROM.get(i, intakesSabados[i-6*nIntakes]);
-      
-      }
-    EEPROM.end();      
-      }
-

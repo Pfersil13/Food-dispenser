@@ -7,8 +7,7 @@
         #include <WiFiUdp.h>     
    
         #define nIntakes 10
-        #define EEPROM_SIZE 70
-
+        #define Days 7
 
         void setUpRTC();
         void getDate(int &currentHour, int &currentMinute, int &currentDay); 
@@ -19,12 +18,5 @@
         void newDay(int day);
 
         void setBunchOfIntakes();
-        
-        //OLD STUFF 
-        //NOT USED
-
-        void storeToEEPROM(int day);
-        void returnFromEEPROM();
-        void cleanEEPROM(int day);
         
 #endif
