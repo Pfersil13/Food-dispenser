@@ -101,7 +101,7 @@ void dispense(int setPoint){
   unsigned int  interval = 200;
   intMsg_out(MQTT_FEEDING,setPoint);
   floatMsg_out(MQTT_INATAKES_CONFIG,nivel );
-  while(k < nCounts){
+ /* while(k < nCounts){
   unsigned long now = millis();
   //reconnect();
     if (now - lastMsg >= interval) {
@@ -118,4 +118,4 @@ void dispense(int setPoint){
       k++;
     }}
     digitalWrite(DRV_ENABLE,HIGH);
-    }}
+    }*/}}

@@ -38,12 +38,12 @@ void setup() {
 
   setup_wifi();         //Call all WiFi Setups functions
   setup_mqtt();         //Call all MQTT Setups functions
-  setup_scale();      //Call all Scale Setups functions
+  //setup_scale();      //Call all Scale Setups functions
   setUpRTC();           //Call all Internet RTC Setups functions
   setupNeopixel();    //Setup LEDS :3
 
   
-  newTareADC();                 //Tare scale
+  //newTareADC();                 //Tare scale
   returnFromFS();     //Return Intakes form SPIFFS
   
   //setBunchOfIntakes();
@@ -68,6 +68,6 @@ void loop() {
     RevisarCalendario(hour, minute, day);
     StringMsg_out(MQTT_INATAKES_CONFIG_CONFIRMATION, String("IM IN"));
     //returnIntakes(0);
-    double weight = readWeight();
-    floatMsg_out(MQTT_FOOD_WEIGHT_TOPIC,weight); 
+    //double weight = readWeight();
+    //floatMsg_out(MQTT_FOOD_WEIGHT_TOPIC,weight); 
   }}

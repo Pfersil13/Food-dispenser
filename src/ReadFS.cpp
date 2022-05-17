@@ -34,7 +34,7 @@ void WriteIntakes(){
     
     for(int k = 0; k < Days; k++){
     
-    File file = LittleFS.open(weekDaysSPIFFS[k], "w");         //Open and write from start  "Domingo.txt"
+    File file = LittleFS.open(weekDaysSPIFFS[k], "w");         //Open and write from start  "K.txt"
     if(!file){
         Serial.print("Failed to open file for reading ");
         Serial.println(weekDaysSPIFFS[k]);
@@ -83,8 +83,10 @@ void returnFromFS(){
         intakesWeight[k][i] = weights;         //Store in array
         i++;
     
+    
+    }
     file.close();
-    }}
+    }
 
     File file = LittleFS.open("/Dispensed.txt", "r");
     if(!file){
