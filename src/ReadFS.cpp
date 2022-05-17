@@ -82,9 +82,9 @@ void returnFromFS(){
         intakes[k][i] = mins;                  //Store in array
         intakesWeight[k][i] = weights;         //Store in array
         i++;
-    
+    }
     file.close();
-    }}
+    }
 
     File file = LittleFS.open("/Dispensed.txt", "r");
     if(!file){

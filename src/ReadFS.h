@@ -14,11 +14,12 @@
     //Function to retrun ALL intakes from the non volatile memory 
     void returnFromFS();
     
-    //A lot of external  arrays to store intakes and its weights
+    //External  arrays to store intakes and its weights
 
     extern int intakes[Days][nIntakes];
     extern int intakesWeight[Days][nIntakes];
    
+   //External arrays to store dispensed intakes ( 1 -> Already dispense, 0 -> Not dispensed)
     extern bool dispensed[nIntakes];
 #endif
 

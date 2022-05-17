@@ -7,6 +7,7 @@
 // Define NTP Client to get time
 WiFiUDP ntpUDP;
 NTPClient timeClient(ntpUDP, "pool.ntp.org");
+
 //Week Days
 String weekDays[7]={"Domingo", "Lunes", "Martes", "Miercoles", "Jueves", "Viernes", "Sabado"};
 
@@ -136,6 +137,9 @@ StringMsg_out(MQTT_INATAKES_CONFIG_CONFIRMATION,weights);
 StringMsg_out(MQTT_INATAKES_CONFIG_CONFIRMATION,disp);
 }
 
+
+//JUST FOR TESTING//
+//NOT IMPORTANT//
 void setBunchOfIntakes(){
 
   addIntake(5, 10, 0, 40);
