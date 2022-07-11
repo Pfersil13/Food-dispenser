@@ -63,9 +63,7 @@ void serverInit(){
             request->send(200, "text/html", "Toma registrada correctamente:<br> DIA: " + inputMessage_DIA +" <br>HORA: "
                                      + inputMessage_HORA + "<br><a href=\"/\">Vuelve a la pagina principal.</a>");
             test_conn();
-            addIntake(H_,m_,ndia,50);
-            Serial.println("NE");
-            delay(1000);
+            addIntake(H_,m_,ndia,10);
           } else {
             request->send(200, "text/html", "Toma no registrada correctamente, introduzca otra hora:<br> DIA: " + inputMessage_DIA +" <br>HORA (incorrecta): "
                                      + inputMessage_HORA + "<br><a href=\"/\">Vuelve a la pagina principal.</a>");

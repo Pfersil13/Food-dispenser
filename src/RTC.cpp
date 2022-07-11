@@ -111,14 +111,29 @@ void RevisarCalendario(int hour, int minute, int day){
 void addIntake(int hour, int minute, int day, int weight){
     int minsDay = hour*60 + minute;
      Serial.println(minsDay);
-    for(int i=0; i < nIntakes; i++ ){
+     if(day == 7){
+      for(int k = 0; k < Days; k++){
+        for(int i=0; i < nIntakes; i++ ){
+        if(intakes[k][i] == 0){
+           intakes[k][i] = minsDay;
+           intakesWeight[k][i] = weight;
+           dispensed[i] = 0;
+           i = nIntakes + 1;
+        }}
+      }
+     }
+     else{
+     for(int i=0; i < nIntakes; i++ ){
         if(intakes[day][i] == 0){
            intakes[day][i] = minsDay;
            intakesWeight[day][i] = weight;
            dispensed[i] = 0;
            i = nIntakes + 1;
            
-        }}}
+        }}
+     }
+    WriteIntakes();
+    }
 
 
 

@@ -12,7 +12,6 @@ long lastReconnectAttempt = 0;
 ///////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////     
 void setup_mqtt() {
-     
 client.setServer(MQTT_SERVER_IP, 1883); //Conect to MQTT server 
 client.setCallback(callback);   //Declare a function to call when MQTT messages arrive
   
@@ -150,15 +149,8 @@ void callback(char* topic, byte* message, unsigned int length) {
     intMsg_out("Hola",minInt);
     intMsg_out("Hola",dayInt);
     intMsg_out("Hola",weightInt);
-
-     if(dayInt == 8){
-      for(int i = 0; i < Days; i++){
-        addIntake(hourInt,minInt,i,weightInt);
-      }
-     }
-     else{
-      addIntake(hourInt,minInt,dayInt,weightInt);
-     }
+    addIntake(hourInt,minInt,dayInt,weightInt);
+     
   }
   if (String(topic) == MQTT_ERASE_INTAKE){
     erase();

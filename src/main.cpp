@@ -53,11 +53,11 @@ void setup() {
   ConnectWiFi_AP_STA(); //Call Wifi functions
   setup_mqtt();         //Call all MQTT Setups functions
   setUpRTC();
-  //setup_scale();      //Call all Scale Setups functions
+  setup_scale();      //Call all Scale Setups functions
   setupNeopixel();    //Setup LEDS :3
 
   
-  //newTareADC();                 //Tare scale
+  newTareADC();                 //Tare scale
   returnFromFS();     //Return Intakes form SPIFFS
   
   //setBunchOfIntakes();
@@ -80,10 +80,10 @@ void loop() {
     lastMsg = now;
     test_conn();
     getDate(hour, minute, day);  
-    //RevisarCalendario(hour, minute, day);
+    RevisarCalendario(hour, minute, day);
     StringMsg_out(MQTT_INATAKES_CONFIG_CONFIRMATION, String("IM IN"));
     returnIntakes(0);
-    //setLeds(nivelDeposito());
-    //double weight = readWeight();
-    //floatMsg_out(MQTT_FOOD_WEIGHT_TOPIC,weight); 
+    setLeds(nivelDeposito());
+    double weight = readWeight();
+    floatMsg_out(MQTT_FOOD_WEIGHT_TOPIC,weight); 
   }}
