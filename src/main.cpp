@@ -16,7 +16,7 @@ float realMass = 100;
 //Variables to make a non blocking delay
 unsigned long now;
 long lastMsg = 0;
-unsigned int  interval =2000;
+unsigned int  interval =5000;
 
 int hour, minute, day;
 
@@ -35,7 +35,7 @@ void setup() {
   digitalWrite(DRV_ENABLE,HIGH);
 
   //IoT & others config stuff
-
+  
   setup_wifi();         //Call all WiFi Setups functions
   setup_mqtt();         //Call all MQTT Setups functions
   setup_scale();      //Call all Scale Setups functions
@@ -67,7 +67,8 @@ void loop() {
     getDate(hour, minute, day);  
     RevisarCalendario(hour, minute, day);
     StringMsg_out(MQTT_INATAKES_CONFIG_CONFIRMATION, String("IM IN"));
-    //returnIntakes(0);
+    returnIntakes(0);
+    setLeds(nivelDeposito());
     double weight = readWeight();
     floatMsg_out(MQTT_FOOD_WEIGHT_TOPIC,weight); 
   }}

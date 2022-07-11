@@ -1,6 +1,8 @@
 #include "MQTT.h"
-
-
+#include "Control.h"
+#include <stdlib.h>
+#include "RTC.h"
+#include "ReadFS.h"
 WiFiClient espClient;
 PubSubClient client(espClient);
 
@@ -33,7 +35,10 @@ boolean reconnect() {
       // ... and resubscribe
 
 
-      //client.subscribe(MQTT_BIN1_RT);
+      client.subscribe(MQTT_FEED_NOW);
+      client.subscribe(MQTT_ADD_INTAKE);
+      client.subscribe(MQTT_ERASE_INTAKE);
+      client.subscribe(MQTT_STORE_INTAKE);
     } else {
       Serial.print("ERROR: failed, rc=");
       Serial.print(client.state());
@@ -84,11 +89,11 @@ void callback(char* topic, byte* message, unsigned int length) {
   Serial.print("Message arrived on topic: ");
   Serial.print(topic);
   Serial.print(". Message: ");
-  String messageTemp;
+  String payload;
   
   for (unsigned int i = 0; i < length; i++) {
     Serial.print((char)message[i]);
-    messageTemp += (char)message[i];
+    payload += (char)message[i];
   }
   Serial.println();
 
@@ -98,21 +103,73 @@ void callback(char* topic, byte* message, unsigned int length) {
   // Changes the output state according to the message
   if (String(topic) == "esp32/output") {
     Serial.print("Changing output to ");
-    if(messageTemp == "on"){
+    if(payload == "on"){
       Serial.println("on");
 
     }
-    else if(messageTemp == "off"){
+    else if(payload == "off"){
       Serial.println("off");
     }
   }
-  if (String(topic) == MQTT_INATAKES_CONFIG) {
-   
-    if(messageTemp == "on"){
-      Serial.println("on");
+  if (String(topic) == MQTT_FEED_NOW) {
+    int x = payload.toInt();
+    dispense(x);
+  }
+  if (String(topic) == MQTT_ADD_INTAKE) {
+    int k = 0;
+    String hour,min,day, weight;
+    for (unsigned int i = 0; i < length; i++) {
+      if((char)message[i] == '_'){
+        k++;
+      }else{
+    switch (k)
+    {
+    case 0:
+      hour += (char)message[i];
+      break;
+    case 1:
+      min += (char)message[i];
+      break;
+    case 2:
+      day += (char)message[i];
+      break;
+    case 3:
+      weight += (char)message[i];
+      break;
+    default:
+      break;
+    }
+      
+  }}
+    int hourInt = hour.toInt();
+    int minInt = min.toInt();
+    int dayInt = day.toInt();
+    int weightInt = weight.toInt();
 
-    }}
+    intMsg_out("Hola",hourInt);
+    intMsg_out("Hola",minInt);
+    intMsg_out("Hola",dayInt);
+    intMsg_out("Hola",weightInt);
+
+     if(dayInt == 8){
+      for(int i = 0; i < Days; i++){
+        addIntake(hourInt,minInt,i,weightInt);
+      }
+     }
+     else{
+      addIntake(hourInt,minInt,dayInt,weightInt);
+     }
+  }
+  if (String(topic) == MQTT_ERASE_INTAKE){
+    erase();
+    WriteIntakes();
+  }
+  if (String(topic) == MQTT_STORE_INTAKE) {
+     WriteIntakes();
+  }
 }
+
+
 
 
 ///////////////////////////////////////////////////////////////

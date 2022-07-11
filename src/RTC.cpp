@@ -118,6 +118,8 @@ void addIntake(int hour, int minute, int day, int weight){
         }}}
 
 
+
+
 ///////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////
@@ -137,6 +139,15 @@ StringMsg_out(MQTT_INATAKES_CONFIG_CONFIRMATION,weights);
 StringMsg_out(MQTT_INATAKES_CONFIG_CONFIRMATION,disp);
 }
 
+
+void erase(){
+for(int k = 0; k < Days;k++){
+    for(int i=0; i < nIntakes; i++ ){
+      intakes[k][i] = 0;
+      intakesWeight[k][i] = 0;
+      dispensed[i] = 1;
+
+  }}}
 
 //JUST FOR TESTING//
 //NOT IMPORTANT//

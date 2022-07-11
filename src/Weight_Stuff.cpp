@@ -108,7 +108,7 @@ double readWeight(){
     long netValue = reading - TareADC;
     double netValueGrams = netValue/cal_factor;
     //Serial.println(reading);
-    //Serial.println(netValue);
+    Serial.println(netValue);
     return netValueGrams;
     
 }

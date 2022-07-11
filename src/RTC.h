@@ -12,6 +12,7 @@
         void setUpRTC();    
         void getDate(int &currentHour, int &currentMinute, int &currentDay); 
         void addIntake(int hour, int minute, int day, int weight);
+        void erase();
         void RevisarCalendario(int hour, int minute, int day);
         void returnIntakes(int day);    
         

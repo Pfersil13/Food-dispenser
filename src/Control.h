@@ -7,13 +7,13 @@
         #define u_max 500
         
         #define n_averages 10
-        #define max_reading 30
+        #define max_reading 15
         #define min_reading 5
         
         #define Kp 25
         #define nCounts 10
 
-        #define MinimumLevel 5
+        #define MinimumLevel 0
 
         extern const int dirPin;
         extern const int stepPin;
