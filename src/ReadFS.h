@@ -9,6 +9,8 @@
     void ReadIntakes();
 
     //Function to write ALL arrays into the non volatile memory 
+    void WriteWiFi(String SSID, String PASS);
+    void returnWiFi();
     void WriteIntakes();
     void WriteDispensed();
     //Function to retrun ALL intakes from the non volatile memory 

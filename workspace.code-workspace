@@ -1,0 +1,51 @@
+{
+	"folders": [
+		{
+			"path": "D:\\Visual_studio\\Proyecto_makers\\IOT"
+		},
+		{
+			"name": "Prueba",
+			"path": "D:\\Makers\\ESP\\Prueba básica\\Prueba"
+		},
+		{
+			"name": "WebWifi",
+			"path": "..\\..\\PlatformIO\\Projects\\WebWifi"
+		},
+		{
+			"name": "Prueba_Wifi_2",
+			"path": "..\\..\\PlatformIO\\Projects\\Prueba_Wifi_2"
+		},
+		{
+			"name": "Prueba_Wifi_3",
+			"path": "..\\..\\PlatformIO\\Projects\\Prueba_Wifi_3"
+		},
+		{
+			"name": "WebWifiUltimoIntento",
+			"path": "..\\..\\PlatformIO\\Projects\\WebWifiUltimoIntento"
+		},
+		{
+			"name": "WebFinal",
+			"path": "..\\..\\PlatformIO\\Projects\\WebFinal"
+		}
+	],
+	"settings": {
+		"files.associations": {
+			"array": "cpp",
+			"*.tcc": "cpp",
+			"memory": "cpp",
+			"istream": "cpp",
+			"ranges": "cpp",
+			"functional": "cpp",
+			"tuple": "cpp",
+			"utility": "cpp",
+			"string": "cpp",
+			"deque": "cpp",
+			"list": "cpp",
+			"unordered_map": "cpp",
+			"vector": "cpp",
+			"string_view": "cpp",
+			"initializer_list": "cpp",
+			"regex": "cpp"
+		}
+	}
+}

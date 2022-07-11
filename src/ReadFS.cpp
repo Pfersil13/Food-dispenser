@@ -22,6 +22,66 @@ void ReadIntakes(){
 
 }
 
+///////////////////////////////////////////////////////////////
+///      Function to save SSID and PASSWORD from Wifi       ///
+///////////////////////////////////////////////////////////////
+
+void WriteWiFi(String SSID, String PASS){
+   if(!LittleFS.begin()){
+        Serial.println("An Error has occurred while mounting LittleFS");
+        return;
+    }
+    
+    
+    
+    File file = LittleFS.open("/Wifi_parameters.txt", "w");        
+    if(!file){
+        Serial.print("Failed to open file for reading ");
+        Serial.println("/Wifi_parameters.txt");
+        return;
+    }
+    
+    Serial.println("File Write: ");
+    file.print(SSID);     
+    file.print("_");                    //Write a "_" for spliting parameters
+    file.print(PASS); 
+    file.print("_");
+    file.close();       //Close file
+}
+///////////////////////////////////////////////////////////////
+///   Function to return SSID and PASSWORD from WiFi saved  ///
+///////////////////////////////////////////////////////////////
+String S, P;
+void returnWiFi(){
+  if(!LittleFS.begin()){
+        Serial.println("An Error has occurred while mounting LittleFS");
+        return;
+    }
+
+
+    File file = LittleFS.open("/Wifi_parameters.txt", "r");     
+    if(!file){
+        Serial.print("Failed to open file for reading ");
+        Serial.println("/Wifi_parameters.txt");
+        return;
+    }
+    
+    Serial.println("File Content:");
+    while(file.available()){
+        String val = file.readStringUntil('_');     //Read until splitter "_"
+        String val_2 = file.readStringUntil('_');  //Read until "\n"
+        S = val;
+        P = val_2; 
+        Serial.print(S);
+        Serial.print(":");
+        Serial.println(P);
+    }
+    file.close();
+    
+    
+}
+
+
 
 ///////////////////////////////////////////////////////////////
 ///Function to write ALL arrays into the non volatile memory///

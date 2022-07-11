@@ -3,7 +3,6 @@
     #define RTC_H
         
         #include <Arduino.h>
-        #include <NTPClient.h>
         #include <WiFiUdp.h>     
    
         #define nIntakes 10 //Defina a maximum number of intakes for day

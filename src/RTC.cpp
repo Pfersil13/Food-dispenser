@@ -3,6 +3,8 @@
 #include <EEPROM.h>
 #include <Control.h>
 #include "ReadFS.h"
+#include <NTPClient.h>
+#include <WiFiUdp.h>
 
 // Define NTP Client to get time
 WiFiUDP ntpUDP;
@@ -27,7 +29,8 @@ int previousDay;
 //¿Need explanation?
 ///////////////////////////////////////////////////////////////
 void setUpRTC(){
-// Initialize a NTPClient to get time
+// Initialize a NTPClient to get 
+Serial.println();
   timeClient.begin();
   // Set offset time in seconds to adjust for your timezone, for example:
   // GMT +1 = 3600
@@ -116,7 +119,6 @@ void addIntake(int hour, int minute, int day, int weight){
            i = nIntakes + 1;
            
         }}}
-
 
 
 

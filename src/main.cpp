@@ -1,13 +1,27 @@
 #include <Arduino.h>
+
+#include <ESP8266Wifi.h>
+#include <ESPAsyncTCP.h>
+#include <ESPAsyncWebServer.h>
+#include <ESP8266mDNS.h>
+#include <string.h>
+
 #include "Weight_Stuff.h"
 #include "Control.h"
-#include "WifiESP.h"
 #include "MQTT.h"
 #include "Pinout.h"
 #include "RTC.h"
 #include "ReadFS.h"
 #include "Light.h"
 
+
+#include "configAP.h"  // Sustituir con datos de vuestra red
+#include "ESP8266_Utils.hpp"
+#include "conversion.hpp"
+#include "asyncServer.hpp"
+
+//Server variable
+AsyncWebServer server(80);
 
 //Scale variable stuff
 long Tare,TareADC;
@@ -36,39 +50,40 @@ void setup() {
 
   //IoT & others config stuff
   
-  setup_wifi();         //Call all WiFi Setups functions
+  ConnectWiFi_AP_STA(); //Call Wifi functions
   setup_mqtt();         //Call all MQTT Setups functions
-  setup_scale();      //Call all Scale Setups functions
-  setUpRTC();           //Call all Internet RTC Setups functions
+  setUpRTC();
+  //setup_scale();      //Call all Scale Setups functions
   setupNeopixel();    //Setup LEDS :3
 
   
-  newTareADC();                 //Tare scale
+  //newTareADC();                 //Tare scale
   returnFromFS();     //Return Intakes form SPIFFS
   
   //setBunchOfIntakes();
 
   setLeds(nivelDeposito());   //Set leds indicator 
+  serverInit(); //Init Web Server
 }
  
 void loop() {
   unsigned long now = millis();   //Return actual run time in ms
-  
+
+  //Serial.println("En el loop");
   test_conn();    //Test MQTT conection  & connect if not
-  testWiFI();     //Test Wifi connection & connect if not
 
   //Structure for calling every interval time 
   if (now - lastMsg >= interval) {  
     returnIntakes(day);
 
+    Serial.println("Hi_Ok");
     lastMsg = now;
     test_conn();
-    testWiFI();
     getDate(hour, minute, day);  
-    RevisarCalendario(hour, minute, day);
+    //RevisarCalendario(hour, minute, day);
     StringMsg_out(MQTT_INATAKES_CONFIG_CONFIRMATION, String("IM IN"));
     returnIntakes(0);
-    setLeds(nivelDeposito());
-    double weight = readWeight();
-    floatMsg_out(MQTT_FOOD_WEIGHT_TOPIC,weight); 
+    //setLeds(nivelDeposito());
+    //double weight = readWeight();
+    //floatMsg_out(MQTT_FOOD_WEIGHT_TOPIC,weight); 
   }}
