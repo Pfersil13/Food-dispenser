@@ -47,7 +47,7 @@ double computePID(double inp, double Setpoint){
 int nivelDeposito(){
     int i;
     int a = 0;
-    float media;
+    float mean; // d in Hacksterio explanation
      
     for(i=0; i<n_averages; i++){
       float reading = ping(Trig,Echo); //Call distance function
@@ -55,12 +55,13 @@ int nivelDeposito(){
       delay(10);
       a= a+reading;   //Add all n values
       }
-    media = a/i;      //Calcualte mean
-    if(media < min_reading){  
-      media = min_reading;
+    mean = a/i;      //Calcualte mean
+    if(mean < min_reading){  
+      mean = 0;
     }
   
-    int porcentaje = 100-(((media-min_reading)*100)/(max_reading-min_reading));
+    float x = mean * 0.97236992039; // cos (13.5 deg) = 0.97236992039
+    int porcentaje = 100-((x*100)/(tank_heigth));
     
     if (porcentaje < 0){
       porcentaje = 0;

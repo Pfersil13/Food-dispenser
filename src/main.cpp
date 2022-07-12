@@ -30,7 +30,7 @@ float realMass = 100;
 //Variables to make a non blocking delay
 unsigned long now;
 long lastMsg = 0;
-unsigned int  interval =5000;
+unsigned int  interval =1000;
 
 int hour, minute, day;
 
@@ -71,7 +71,6 @@ void loop() {
 
   //Serial.println("En el loop");
   test_conn();    //Test MQTT conection  & connect if not
-
   //Structure for calling every interval time 
   if (now - lastMsg >= interval) {  
     returnIntakes(day);

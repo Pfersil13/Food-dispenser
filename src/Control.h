@@ -6,8 +6,9 @@
         #define u_min 100
         #define u_max 500
         
-        #define n_averages 10
+        #define n_averages 3
         #define max_reading 15
+        #define tank_heigth 15
         #define min_reading 5
         
         #define Kp 25
