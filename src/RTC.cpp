@@ -24,6 +24,8 @@ int intakesWeight[Days][nIntakes];
 bool dispensed[nIntakes] ;
 
 
+unsigned int previoustime = 0;
+
 int previousDay;
 ///////////////////////////////////////////////////////////////
 //¿Need explanation?
@@ -59,7 +61,7 @@ WriteDispensed();
 ///////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////
-void getDate(int &currentHour, int &currentMinute, int &currentDay){
+void getDate(int &currentHour, int &currentMinute, int &currentSecond , int &currentDay){
 
 timeClient.update();
 
@@ -75,7 +77,7 @@ currentHour = timeClient.getHours();
   
 currentMinute = timeClient.getMinutes();
   
-//int currentSecond = timeClient.getSeconds(); 
+currentSecond = timeClient.getSeconds(); 
 
 currentDay = timeClient.getDay();
 
@@ -165,6 +167,48 @@ for(int k = 0; k < Days;k++){
       dispensed[i] = 1;
 
   }}}
+
+void RTCNoWifi(int &hours, int &mins, int &secs , int &day){
+
+
+
+   
+  unsigned int now  = millis();
+  if (now - previoustime >= 1000)
+  {
+    secs++;
+    previoustime = now;
+  }
+   if (secs > 59)
+  {
+    mins++;
+    secs = 0;
+  }
+
+  if (mins > 59)
+  {
+    hours++;
+    mins = 0;
+  }
+
+  if (hours > 23)
+  {
+    hours = 0;
+    day++;
+  }
+  if (day > 6){
+    day = 0;
+  }
+  Serial.print(hours);
+  Serial.print(":");
+  Serial.print(mins);
+  Serial.print(":");
+  Serial.print(secs);
+  Serial.print("   /   ");
+  Serial.println(day);
+ }
+  
+
 
 //JUST FOR TESTING//
 //NOT IMPORTANT//

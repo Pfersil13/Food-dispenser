@@ -5,6 +5,7 @@
 #include <ESPAsyncWebServer.h>
 #include <ESP8266mDNS.h>
 #include <string.h>
+#include <AsyncElegantOTA.h>
 
 #include "Weight_Stuff.h"
 #include "Control.h"
@@ -30,9 +31,9 @@ float realMass = 100;
 //Variables to make a non blocking delay
 unsigned long now;
 long lastMsg = 0;
-unsigned int  interval =1000;
+unsigned int  interval =5000;
 
-int hour, minute, day;
+int hour, minute, second, day;
 
 void setup() {
   //Configure serial & little FS
@@ -63,14 +64,22 @@ void setup() {
   //setBunchOfIntakes();
 
   setLeds(nivelDeposito());   //Set leds indicator 
-  serverInit(); //Init Web Server
+  serverInit(); //Init Web Serverv
+
+  AsyncElegantOTA.begin(&server);    // Start ElegantOTA
+  server.begin();
+  Serial.println("HTTP server started");
 }
  
 void loop() {
   unsigned long now = millis();   //Return actual run time in ms
 
   //Serial.println("En el loop");
-  test_conn();    //Test MQTT conection  & connect if not
+  test_conn();    //Test MQTT conection  & connect 
+
+  if (WiFi.status() != WL_CONNECTED){
+    RTCNoWifi(hour, minute , second , day);
+  }
   //Structure for calling every interval time 
   if (now - lastMsg >= interval) {  
     returnIntakes(day);
@@ -78,7 +87,7 @@ void loop() {
     Serial.println("Hi_Ok");
     lastMsg = now;
     test_conn();
-    getDate(hour, minute, day);  
+    getDate(hour, minute, second, day);  
     RevisarCalendario(hour, minute, day);
     StringMsg_out(MQTT_INATAKES_CONFIG_CONFIRMATION, String("IM IN"));
     returnIntakes(0);
