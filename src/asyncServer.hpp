@@ -9,7 +9,7 @@
 #endif
 
 extern AsyncWebServer server;
-int ndia,H_,m_;
+int ndia,H_,m_,_p;
 
 //Define the parameters of the get forms from html
 const char* PARAM_INPUT_SSID = "ssidInput";
@@ -45,9 +45,7 @@ void serverInit(){
       inputMessage_PASS= request->getParam(PARAM_INPUT_PASS)->value();
       inputParam_PASS = PARAM_INPUT_PASS;
       Serial.println(inputMessage);
-      request->send(200, "text/html", "Parametros wifi correctamente enviados al dispensador ( SSID: " 
-                                     + inputParam_SSID + ", CONTRASEÑA: " + inputParam_PASS + ")<br> WIFI:" + inputMessage_SSID +" <br>CONTRASEÑA: "
-                                     + inputMessage_PASS + "<br><a href=\"/\">Vuelve a la pagina principal.</a>");
+      request->send(200, "text/html", "WiFi parameters correctly sended to the dispenser.<br> WIFI:" + inputMessage_SSID + "<br><a href=\"/\">Return to home page.</a>");
       WriteWiFi(inputMessage_SSID, inputMessage_PASS);            
       ConnectWiFi_AP_STA();
 
@@ -60,32 +58,37 @@ void serverInit(){
         strcpy(&dia_char, inputMessage_DIA.c_str());
         if(dia(dia_char, ndia)==true){
           if(hora(inputMessage_HORA, H_, m_)==true){
-            request->send(200, "text/html", "Toma registrada correctamente:<br> DIA: " + inputMessage_DIA +" <br>HORA: "
-                                     + inputMessage_HORA + "<br><a href=\"/\">Vuelve a la pagina principal.</a>");
+
+          if(request->hasParam(PARAM_INPUT_PESO)){
+            String inputMessage_PESO = request->getParam(PARAM_INPUT_PESO)->value();
+            String inputParam_PESO = PARAM_INPUT_PESO;
+            
+            request->send(200, "text/html", "Food correctly registered:<br> DAY: " + inputMessage_DIA +" <br>HOUR: "
+                                     + inputMessage_HORA + "<br> WEIGHT: " + inputMessage_PESO + "<br><a href=\"/\">Return to home page.</a>");
             test_conn();
-            addIntake(H_,m_,ndia,10);
+            peso(inputMessage_PESO,_p);
+            addIntake(H_,m_,ndia,_p);
+            delay(1000);
           } else {
-            request->send(200, "text/html", "Toma no registrada correctamente, introduzca otra hora:<br> DIA: " + inputMessage_DIA +" <br>HORA (incorrecta): "
-                                     + inputMessage_HORA + "<br><a href=\"/\">Vuelve a la pagina principal.</a>");
+              String inputMessage_PESO = request->getParam(PARAM_INPUT_PESO)->value();
+              String inputParam_PESO = PARAM_INPUT_PESO;
+              request->send(200, "text/html", "Food incorrectly registered:<br> DAY: " + inputMessage_DIA +" <br>HOUR: "
+                                     + inputMessage_HORA + "<br> WEIGHT (incorrect): " + inputMessage_PESO + "<br><a href=\"/\">Return to home page.</a>");
           }
         } else {
+            request->send(200, "text/html", "Date incorrectly registered: <br> DAY: " + inputMessage_DIA +" <br>HOUR (incorrect): "
+                                     + inputMessage_HORA + "<br><a href=\"/\">Return to home page.</a>");
+        }
+        } else {
           if(hora(inputMessage_HORA, H_, m_)==true){
-          request->send(200, "text/html", "Toma no registrada correctamente, introduzca otro dia:<br> DIA (incorrecto): " + inputMessage_DIA +" <br>HORA: "
-                                     + inputMessage_HORA + "<br><a href=\"/\">Vuelve a la pagina principal.</a>");
+          request->send(200, "text/html", "Date incorrectly registered:<br> DAY (incorrect): " + inputMessage_DIA +" <br>HOUR: "
+                                     + inputMessage_HORA + "<br><a href=\"/\">Return to home page.</a>");
           } else {
-          request->send(200, "text/html", "Toma no registrada correctamente, introduzca otro dia y hora:<br> DIA (incorrecto): " + inputMessage_DIA +" <br>HORA (incorrecta): "
-                                     + inputMessage_HORA + "<br><a href=\"/\">Vuelve a la pagina principal.</a>");
+          request->send(200, "text/html", "Date incorrectly registered:<br> DAY (incorrect): " + inputMessage_DIA +" <br>HOUR (incorrect): "
+                                     + inputMessage_HORA + "<br><a href=\"/\">Return to home page.</a>");
           }
 
         }
-
-    } else if(request->hasParam(PARAM_INPUT_PESO)){
-        String inputMessage_PESO = request->getParam(PARAM_INPUT_PESO)->value();
-        String inputParam_PESO = PARAM_INPUT_PESO;
-
-        request->send(200, "text/html", "Toma registrada correctamente:<br> PESO: " + inputMessage_PESO 
-                                                + "<br><a href=\"/\">Vuelve a la pagina principal.</a>");
-        peso(inputMessage_PESO);
 
     } else {
       inputMessage = "No message sent";

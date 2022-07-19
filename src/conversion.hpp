@@ -33,10 +33,10 @@ bool dia(char d, int &ndia){
 
 }
 
-void peso (String p){
+void peso (String p, int &_p){
     char pc[2];
     strcpy(pc, p.c_str());
-    int _p = atoi(pc);
+    _p = atoi(pc);
     Serial.println("Peso (g):");
     Serial.println(_p);
 }
