@@ -31,7 +31,7 @@ float realMass = 100;
 //Variables to make a non blocking delay
 unsigned long now;
 long lastMsg = 0;
-unsigned int  interval =5000;
+unsigned int  interval =60000;
 
 int hour, minute, second, day;
 
@@ -90,7 +90,7 @@ void loop() {
     getDate(hour, minute, second, day);  
     RevisarCalendario(hour, minute, day);
     StringMsg_out(MQTT_INATAKES_CONFIG_CONFIRMATION, String("IM IN"));
-    returnIntakes(0);
+    returnIntakes(day);
     setLeds(nivelDeposito());
     double weight = readWeight();
     floatMsg_out(MQTT_FOOD_WEIGHT_TOPIC,weight); 
