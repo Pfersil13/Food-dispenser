@@ -13,8 +13,8 @@ html { font-family: Helvetica; display: inline-block; margin: 0px auto; text-ali
 <h1>Food dispenser</h1></head><body>
 <center><h2>Wifi Configuration</h2></center>
 <form action="/get">
-<input type="text" id="ssidInput" name="ssidInput" placeholder="SSID" required minlength="4" maxlength="20" size="20"></br>
-<input type="password" id="pass" name="pass" placeholder="Password" required minlength="4" maxlength="20" size="20">
+<input type="text" id="ssidInput" name="ssidInput" placeholder="SSID" required minlength="4" maxlength="50" size="50"></br>
+<input type="password" id="pass" name="pass" placeholder="Password" required minlength="4" maxlength="50" size="50">
 <p><button class="btn" type="submit" value="Submit">Change WiFi</button></a>
 </form>
 </br><center><h2>Date configuration</h2></center>
